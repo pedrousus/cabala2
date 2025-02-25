@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    /* Estilos específicos para el formulario de inicio de sesión */
+    .login-container {
+        background-color: white; /* Fondo blanco */
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    .login-container h2 {
+        color: var(--color-fondo-oscuro); /* Título en marrón oscuro */
+        margin-bottom: 25px;
+        font-size: 2rem;
+        text-align: center;
+    }
+
+    .login-container .lead {
+        color: var(--color-detalle); /* Texto en gris oscuro */
+        margin-bottom: 30px;
+        font-size: 1.1rem;
+        text-align: center;
+    }
+
+    .login-container .form-group {
+        margin-bottom: 25px;
+        position: relative;
+    }
+
+    .login-container .form-label {
+        color: var(--color-texto); /* Texto casi negro */
+        font-weight: bold;
+        font-size: 1rem;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .login-container .form-control {
+        border: 2px solid var(--color-detalle); /* Borde gris oscuro */
+        border-radius: 8px;
+        padding: 12px 12px 12px 40px; /* Espacio para el ícono */
+        font-size: 1rem;
+        width: 100%;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .login-container .form-control:focus {
+        border-color: var(--color-secundario); /* Borde verde claro al enfocar */
+        box-shadow: 0 0 8px rgba(199, 205, 131, 0.5); /* Sombra verde claro */
+    }
+
+    .login-container .form-group i {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--color-detalle); /* Color gris oscuro */
+        font-size: 1.2rem;
+    }
+
+    .login-container .btn-primary {
+        background-color: var(--color-secundario); /* Fondo verde claro */
+        color: var(--color-texto); /* Texto casi negro */
+        border: none;
+        border-radius: 8px;
+        padding: 12px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s, transform 0.3s;
+        width: 100%;
+    }
+
+    .login-container .btn-primary:hover {
+        background-color: var(--color-fondo-oscuro); /* Fondo marrón oscuro al pasar el mouse */
+        color: white; /* Texto blanco */
+        transform: scale(1.02); /* Efecto de escala */
+    }
+
+    .login-container .btn-primary:active {
+        transform: scale(0.98); /* Efecto de clic */
+    }
+
+    .login-container .alert-danger {
+        background-color: #ffebee; /* Fondo rojo claro */
+        color: #c62828; /* Texto rojo oscuro */
+        border: 1px solid #c62828; /* Borde rojo oscuro */
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 25px;
+        text-align: center;
+    }
+
+    .login-container .invalid-feedback {
+        color: #c62828; /* Texto rojo oscuro para errores */
+        font-size: 0.9rem;
+        margin-top: 5px;
+    }
+
+    .login-container a {
+        color: var(--color-secundario); /* Enlace verde claro */
+        text-decoration: none;
+        font-weight: bold;
+        transition: color 0.3s;
+    }
+
+    .login-container a:hover {
+        color: var(--color-fondo-oscuro); /* Enlace marrón oscuro al pasar el mouse */
+    }
+
+    .login-container .text-center {
+        margin-top: 20px;
+    }
+</style>
+
+<div class="container mt-1">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="login-container">
+                <h2 class="text-center">Inicio</h2>
+                <p class="lead text-center mb-4">Inicia sesión para acceder a todas las funcionalidades.</p>
+
+                <!-- Mostrar mensajes de error -->
+                {% if error %}
+                <div class="alert alert-danger text-center" role="alert">
+                    {{ error }}
+                </div>
+                {% endif %}
+
+                <!-- Formulario -->
+                <form method="POST" class="needs-validation" novalidate>
+                    {% csrf_token %}
+                    
+                    <!-- Campo de nombre de usuario -->
+                    <div class="form-group">
+                        <label for="id_username" class="form-label">Nombre de usuario</label>
+                        <i class="fas fa-user"></i> <!-- Ícono de usuario -->
+                        <input type="text" name="username" id="id_username" class="form-control" required>
+                    </div>
+
+                    <!-- Campo de contraseña -->
+                    <div class="form-group">
+                        <label for="id_password" class="form-label">Contraseña</label>
+                        <i class="fas fa-lock"></i> <!-- Ícono de candado -->
+                        <input type="password" name="password" id="id_password" class="form-control" required>
+                    </div>
+
+                    <!-- Botón de envío -->
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Enviar</button>
+                    </div>
+                </form>
+
+                <!-- Enlace a registro -->
+                <div class="mt-4 text-center">
+                    ¿No tienes una cuenta? <a href="{% url 'registro' %}">Regístrate</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script para validación de formularios -->
+<script>
+    (function () {
+        'use strict'
+        var forms = document.querySelectorAll('.needs-validation')
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+</script>
+
+<!-- FontAwesome para íconos -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+{% endblock %}

@@ -1,0 +1,230 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    /* Estilos específicos para el formulario de registro */
+    .register-container {
+        background-color: white; /* Fondo blanco */
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    .register-container h2 {
+        color: var(--color-fondo-oscuro); /* Título en marrón oscuro */
+        margin-bottom: 25px;
+        font-size: 2rem;
+        text-align: center;
+    }
+
+    .register-container .form-group {
+        margin-bottom: 25px;
+        position: relative;
+    }
+
+    .register-container .form-label {
+        color: var(--color-texto); /* Texto casi negro */
+        font-weight: bold;
+        font-size: 1rem;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .register-container .form-control {
+        border: 2px solid var(--color-detalle); /* Borde gris oscuro */
+        border-radius: 8px;
+        padding: 12px 12px 12px 40px; /* Espacio para el ícono */
+        font-size: 1rem;
+        width: 100%;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .register-container .form-control:focus {
+        border-color: var(--color-secundario); /* Borde verde claro al enfocar */
+        box-shadow: 0 0 8px rgba(199, 205, 131, 0.5); /* Sombra verde claro */
+    }
+
+    .register-container .form-group i {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--color-detalle); /* Color gris oscuro */
+        font-size: 1.2rem;
+    }
+
+    .register-container .btn-primary {
+        background-color: var(--color-secundario); /* Fondo verde claro */
+        color: var(--color-texto); /* Texto casi negro */
+        border: none;
+        border-radius: 8px;
+        padding: 12px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s, transform 0.3s;
+        width: 100%;
+    }
+
+    .register-container .btn-primary:hover {
+        background-color: var(--color-fondo-oscuro); /* Fondo marrón oscuro al pasar el mouse */
+        color: white; /* Texto blanco */
+        transform: scale(1.02); /* Efecto de escala */
+    }
+
+    .register-container .btn-primary:active {
+        transform: scale(0.98); /* Efecto de clic */
+    }
+
+    .register-container .alert-danger {
+        background-color: #ffebee; /* Fondo rojo claro */
+        color: #c62828; /* Texto rojo oscuro */
+        border: 1px solid #c62828; /* Borde rojo oscuro */
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 25px;
+        text-align: center;
+    }
+
+    .register-container .alert-success {
+        background-color: #e8f5e9; /* Fondo verde claro */
+        color: #2e7d32; /* Texto verde oscuro */
+        border: 1px solid #2e7d32; /* Borde verde oscuro */
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 25px;
+        text-align: center;
+    }
+
+    .register-container a {
+        color: var(--color-secundario); /* Enlace verde claro */
+        text-decoration: none;
+        font-weight: bold;
+        transition: color 0.3s;
+    }
+
+    .register-container a:hover {
+        color: var(--color-fondo-oscuro); /* Enlace marrón oscuro al pasar el mouse */
+    }
+
+    .register-container .text-center {
+        margin-top: 20px;
+    }
+</style>
+
+<div class="container mt-4"> <!-- Margen superior reducido -->
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="register-container">
+                <h2 class="text-center">Regístrate</h2>
+                <p class="lead text-center mb-4">Crea una cuenta para acceder a todas las funcionalidades.</p>
+
+                <!-- Mensajes de error o éxito -->
+                {% if error %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                {% endif %}
+                {% if success %}
+                    <div class="alert alert-success">{{ success }}</div>
+                {% endif %}
+
+                <!-- Formulario -->
+                <div id="error-message" class="alert alert-danger" style="display: none;"></div>
+                <form method="POST" action="{% url 'registro' %}">
+                    {% csrf_token %}
+
+                    <!-- Campo de nombre de usuario -->
+                    <div class="form-group">
+                        <label for="username" class="form-label">Nombre de usuario</label>
+                        <i class="fas fa-user"></i> <!-- Ícono de usuario -->
+                        <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+
+                    <!-- Campo de correo electrónico -->
+                    <div class="form-group">
+                        <label for="email" class="form-label">Correo electrónico</label>
+                        <i class="fas fa-envelope"></i> <!-- Ícono de correo -->
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+
+                    <!-- Campo de contraseña -->
+                    <div class="form-group">
+                        <label for="password1" class="form-label">Contraseña</label>
+                        <i class="fas fa-lock"></i> <!-- Ícono de candado -->
+                        <input type="password" class="form-control" id="password1" name="password1" required>
+                    </div>
+
+                    <!-- Campo de confirmación de contraseña -->
+                    <div class="form-group">
+                        <label for="password2" class="form-label">Confirmar contraseña</label>
+                        <i class="fas fa-lock"></i> <!-- Ícono de candado -->
+                        <input type="password" class="form-control" id="password2" name="password2" required>
+                    </div>
+
+                    <!-- Botón de envío -->
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Registrarse</button>
+                    </div>
+                </form>
+
+                <!-- Enlace para iniciar sesión -->
+                <div class="mt-4 text-center">
+                    ¿Ya tienes una cuenta? <a href="{% url 'inicio' %}">Inicia sesión</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FontAwesome para íconos -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script><script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector("form"); // Selecciona el formulario
+        const password1 = document.getElementById("password1"); // Campo de contraseña
+        const password2 = document.getElementById("password2"); // Campo de confirmación de contraseña
+        const errorMessage = document.getElementById("error-message"); // Contenedor de mensajes de error
+
+        form.addEventListener("submit", function (event) {
+            const password = password1.value; // Obtiene el valor de la contraseña
+
+            // Expresión regular para validar la contraseña
+            const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+
+            if (!regex.test(password)) {
+                // Si la contraseña no cumple con los requisitos
+                event.preventDefault(); // Evita el envío del formulario
+                errorMessage.textContent =
+                    "La contraseña no cumple con los requisitos de seguridad.\n" +
+                    "Debe tener al menos:\n" +
+                    "- 8 caracteres\n" +
+                    "- Una letra mayúscula\n" +
+                    "- Una letra minúscula\n" +
+                    "- Un número\n" +
+                    "- Un carácter especial (!@#$%^&*)";
+                errorMessage.style.display = "block"; // Muestra el mensaje de error
+                password1.focus(); // Enfoca el campo de contraseña
+
+                // Desplaza la página al inicio del formulario
+                window.scrollTo({ top: 0, behavior: "smooth" });
+                return false;
+            }
+
+            // Verifica que las contraseñas coincidan
+            if (password1.value !== password2.value) {
+                event.preventDefault(); // Evita el envío del formulario
+                errorMessage.textContent = "Las contraseñas no coinciden.";
+                errorMessage.style.display = "block"; // Muestra el mensaje de error
+                password2.focus(); // Enfoca el campo de confirmación de contraseña
+
+                // Desplaza la página al inicio del formulario
+                window.scrollTo({ top: 0, behavior: "smooth" });
+                return false;
+            }
+
+            // Si todo está bien, oculta el mensaje de error
+            errorMessage.style.display = "none";
+        });
+    });
+</script>
+{% endblock %}

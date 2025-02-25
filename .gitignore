@@ -1,0 +1,22 @@
+# Entornos virtuales
+venv/
+env/
+
+# Archivos de caché de Python
+__pycache__/
+*.py[cod]
+
+# Base de datos local
+db.sqlite3
+
+# Archivos de entorno
+.env
+
+# Archivos estáticos recolectados
+staticfiles/
+
+# Configuraciones locales de VSCode
+.vscode/
+
+# Archivos específicos de la aplicación
+traslate/traslate-451505-3dd398cbea06.json

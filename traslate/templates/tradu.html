@@ -1,0 +1,352 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    /* Paleta de colores */
+    :root {
+        --color-principal: #ADAEC0; /* Gris azulado */
+        --color-secundario: #C7CD83; /* Verde claro */
+        --color-texto: #31282D; /* Casi negro */
+        --color-fondo-oscuro: #483E46; /* Marrón oscuro */
+        --color-detalle: #7E7A88; /* Gris oscuro */
+        }
+        /* Estilos para el botón "Traducir" */
+    .btn-primary {
+        background-color: var(--color-secundario); /* Fondo verde claro */
+        color: var(--color-texto); /* Texto casi negro */
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s, transform 0.3s;
+    }
+
+    .btn-primary:hover {
+        background-color: var(--color-fondo-oscuro); /* Fondo marrón oscuro al pasar el mouse */
+        color: white; /* Texto blanco */
+        transform: scale(1.05); /* Efecto de escala al pasar el mouse */
+    }
+
+    .btn-primary:active {
+        transform: scale(0.95); /* Efecto de clic */
+    }
+
+    /* Estilos generales */
+    body {
+        background: var(--color-principal); /* Fondo principal */
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        color: var(--color-texto); /* Texto principal */
+        font-family: Arial, sans-serif;
+    }
+
+    .container {
+        background-color: white; /* Fondo blanco para el contenido */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Estilos para los modales */
+    /* Estilos para los modales */
+    .modal-content {
+        background: var(--color-principal); /* Fondo gris azulado */
+        border-radius: 15px;
+        border: 2px solid var(--color-texto); /* Borde negro */
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Sombra más pronunciada */
+        overflow: hidden; /* Para que el contenido no se salga del borde redondeado */
+    }
+
+    .modal-header {
+        background: var(--color-fondo-oscuro); /* Fondo marrón oscuro */
+        color: white;
+        border-bottom: 2px solid var(--color-texto); /* Borde negro */
+        padding: 15px 20px; /* Más espacio interno */
+    }
+
+    .modal-title {
+        font-weight: bold;
+        font-size: 1.5rem; /* Título más grande */
+    }
+
+    .modal-body {
+        padding: 20px;
+        font-size: 16px;
+        color: var(--color-texto); /* Texto casi negro */
+        background-color: white; /* Fondo blanco para el cuerpo */
+    }
+
+    .modal-footer {
+        background: var(--color-principal); /* Fondo gris azulado */
+        border-top: 2px solid var(--color-texto); /* Borde negro */
+        padding: 15px 20px; /* Más espacio interno */
+        text-align: right; /* Alinear botones a la derecha */
+    }
+
+    .modal-footer button {
+        background-color: var(--color-secundario); /* Fondo verde claro */
+        color: var(--color-texto); /* Texto casi negro */
+        border: none;
+        border-radius: 5px;
+        padding: 8px 16px;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .modal-footer button:hover {
+        background-color: var(--color-fondo-oscuro); /* Fondo marrón oscuro al pasar el mouse */
+        color: white;
+    }
+
+    /* Animación de apertura del modal */
+    @keyframes modalFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .modal.fade .modal-dialog {
+        animation: modalFadeIn 0.3s ease-out;
+    }
+    /* Estilos para el buscador */
+    .search-container input {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid var(--color-detalle); /* Borde gris oscuro */
+        background-color: white; /* Fondo blanco */
+        color: var(--color-texto); /* Texto casi negro */
+    }
+
+    .search-container button {
+        margin-top: 10px;
+        width: 100%;
+        background-color: var(--color-secundario); /* Fondo verde claro */
+        color: var(--color-texto); /* Texto casi negro */
+        border: none;
+        border-radius: 5px;
+        padding: 10px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .search-container button:hover {
+        background-color: var(--color-fondo-oscuro); /* Fondo marrón oscuro al pasar el mouse */
+        color: white;
+    }
+
+    /* Estilos para las tarjetas de consultas anteriores */
+    .card {
+        background-color: white; /* Fondo blanco */
+        border: 1px solid var(--color-detalle); /* Borde gris oscuro */
+        border-radius: 10px;
+        margin-bottom: 10px;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+        transform: translateY(-5px); /* Efecto de elevación */
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-body {
+        color: var(--color-texto); /* Texto casi negro */
+    }
+
+    /* Estilos para el botón flotante */
+    .scroll-to-top {
+        display: none;
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        background-color: var(--color-secundario); /* Fondo verde claro */
+        color: var(--color-texto); /* Texto casi negro */
+        border-radius: 50%;
+        text-align: center;
+        line-height: 50px;
+        font-size: 24px;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.3s, transform 0.3s;
+    }
+
+    .scroll-to-top:hover {
+        background-color: var(--color-fondo-oscuro); /* Fondo marrón oscuro al pasar el mouse */
+        color: white;
+        transform: scale(1.1);
+    }
+    /* Estilos para la imagen */
+    .header-image {
+        display: block; /* Asegura que la imagen sea un bloque */
+        margin: 0 auto; /* Centra la imagen horizontalmente */
+        border-radius: 50%; /* Hace la imagen circular */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra suave */
+        transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transición suave */
+    }
+
+    .header-image:hover {
+        transform: scale(1.1); /* Efecto de escala al pasar el mouse */
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Sombra más pronunciada al pasar el mouse */
+    }
+
+    /* Ajustes adicionales para el título y la descripción */
+    h2 {
+        margin-top: 20px; /* Espacio entre la imagen y el título */
+        font-size: 2rem; /* Tamaño del título */
+        color: var(--color-fondo-oscuro); /* Color marrón oscuro */
+    }
+
+    .lead {
+        font-size: 1.1rem; /* Tamaño de la descripción */
+        color: var(--color-detalle); /* Color gris oscuro */
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            {% load static %}
+            <img src="{% static 'images/sin_fondo.png' %}" alt="Logo" alt="Logo" class="header-image mb-3" style="width: 100px; height: auto;">
+            <h2 class="text-center">Traductor a Hebreo y Cábala</h2>
+            <p class="lead text-center mb-4">Ingrese una frase o palabra en español para obtener su traducción al hebreo y su equivalente en numerología cabalística.</p>
+
+            <form method="POST" class="needs-validation" novalidate id="translationForm">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label for="phrase" class="form-label">Ingrese la frase o palabra:</label>
+                    <input type="text" class="form-control" id="phrase" name="phrase" required>
+                </div>
+            
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">Traducir</button>
+                </div>
+            </form>
+
+            {% if hebrew_translation and cabala_translation %}
+                <div class="mt-4">
+                    <h3 class="text-center">Resultados</h3>
+                    <p class="text-center"><strong>Texto Original:</strong> {{ phrase }}</p>
+                    <p class="text-center"><strong>Traducción al Hebreo:</strong> {{ hebrew_translation }}</p>
+                    <p class="text-center"><strong>Numerología Cabalística:</strong> {{ cabala_translation }}</p>
+                </div>
+            {% endif %}
+
+            {% if error %}
+                <div class="alert alert-danger mt-4">{{ error }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="mt-5">
+        <h3 class="text-center">Frases consultadas anteriormente</h3>
+    
+        <!-- Buscador -->
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Buscar frase o palabra...">
+        </div><br>
+    
+        <!-- Lista de consultas anteriores -->
+        {% if not previous_translations %}
+            <p class="text-center">No hay consultas anteriores.</p>
+        {% else %}
+            {% for translation in previous_translations %}
+                <div class="card mb-3 translation-card" data-bs-toggle="modal" data-bs-target="#modal{{ forloop.counter }}">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">{{ translation.original_text }}</h5>
+                    </div>
+                </div>
+    
+                <!-- Modal -->
+                <div class="modal fade" id="modal{{ forloop.counter }}" tabindex="-1" aria-labelledby="modalLabel{{ forloop.counter }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title text-center" id="modalLabel{{ forloop.counter }}">Detalles de la Traducción</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p><strong>Frase Original:</strong> {{ translation.original_text }}</p>
+                                <p><strong>Traducción al Hebreo:</strong> {{ translation.hebrew_text }}</p>
+                                <p><strong>Numerología Cabalística:</strong> {{ translation.cabala_value }}</p>
+                            </div>
+                            <div class="modal-footer d-flex flex-column">
+                                <p class="text-muted"><strong>Fecha de consulta:</strong> {{ translation.created_at }}</p>
+                                <button type="button" class="btn btn-secondary mt-2" data-bs-dismiss="modal">Cerrar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+<div id="scrollToTopBtn" class="scroll-to-top">
+    <span>&uarr;</span>
+</div>
+
+<script>
+    window.onscroll = function() {
+        const scrollToTopBtn = document.getElementById("scrollToTopBtn");
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            scrollToTopBtn.style.display = "block"; // Mostrar el botón
+        } else {
+            scrollToTopBtn.style.display = "none"; // Ocultar el botón
+        }
+    };
+
+    // Desplazar la página al principio al hacer clic en el botón
+    document.getElementById("scrollToTopBtn").addEventListener("click", function() {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth" // Desplazamiento suave
+        });
+    });
+    // Limpiar el campo de entrada después de enviar el formulario
+    document.getElementById("translationForm").addEventListener("submit", function() {
+        setTimeout(() => {
+            document.getElementById("phrase").value = ""; // Limpiar el campo de entrada
+        }, 100);
+    });
+
+    // Validar el formulario antes de enviar
+    function validateForm() {
+        const phraseInput = document.getElementById("phrase");
+        if (phraseInput.value.trim() === "") {
+            alert("Por favor, ingrese una frase o palabra.");
+            return false;
+        }
+        return true;
+    }
+
+    // Filtrar las consultas anteriores en tiempo real
+    document.getElementById("searchInput").addEventListener("input", function() {
+        filterTranslations();
+    });
+
+    // Función para filtrar las consultas anteriores
+    function filterTranslations() {
+        const input = document.getElementById("searchInput").value.toLowerCase();
+        const cards = document.querySelectorAll(".translation-card");
+
+        cards.forEach(card => {
+            const text = card.querySelector(".card-title").textContent.toLowerCase();
+            if (text.includes(input)) {
+                card.style.display = "block";
+            } else {
+                card.style.display = "none";
+            }
+        });
+    }
+</script>
+
+{% endblock %}
