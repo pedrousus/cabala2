@@ -134,6 +134,7 @@ google_credentials = {
 # Crear el directorio .credentials si no existe
 credentials = service_account.Credentials.from_service_account_info(google_credentials)
 
+
 def translate_to_hebrew(text):
     """
     Traduce el texto al hebreo usando la API de Google Translate.
