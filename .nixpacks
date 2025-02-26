@@ -1,17 +1,2 @@
-[phases.setup]
-nixPkgs = ['python310', 'gcc']
-
-[phases.install]
-cmds = [
-    "python -m venv /opt/venv",
-    ". /opt/venv/bin/activate",
-    "pip install -r requirements.txt"
-]
-
-[phases.build]
-cmds = [
-    "python manage.py collectstatic --noinput"
-]
-
-[start]
-cmd = ". /opt/venv/bin/activate && gunicorn traslateapi.wsgi:application --bind 0.0.0.0:$PORT"
+[pip]
+no_cache = true
