@@ -15,7 +15,8 @@ cmds = [
     "python manage.py collectstatic --noinput"
 ]
 
+
 [start]
-cmd = ". /opt/venv/bin/activate && gunicorn traslateapi.wsgi:application --bind 0.0.0.0:$PORT"
+cmd = ".\venv\Scripts\activate && gunicorn traslateapi.wsgi:application --bind 0.0.0.0:$PORT"
 
 
