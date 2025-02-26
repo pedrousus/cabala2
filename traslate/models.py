@@ -17,7 +17,8 @@ class Translation(models.Model):
     original_text = models.TextField()  # Texto original en español
     hebrew_text = models.TextField()  # Traducción al hebreo
     cabala_value = models.IntegerField(null=False, blank=False)  # Valor numerológico en la Cábala
-    created_at = models.DateTimeField(default=timezone.now)  # Fecha de creación
+    created_at = models.DateTimeField(default=timezone.now)
+  # Fecha de creación
 
     def __str__(self):
         return f"{self.original_text} -> {self.hebrew_text} ({self.cabala_value})"

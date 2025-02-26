@@ -18,7 +18,7 @@ from django.utils import timezone
 from datetime import timedelta
 from django.dispatch import receiver
 from django.contrib.auth.signals import user_logged_in
-
+import json
 import os
 from dotenv import load_dotenv
 load_dotenv()
@@ -114,7 +114,35 @@ def salir(request):
     
     
 # Diccionario del alfabeto hebreo con valores numerológicos
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "traslate/traslate-451505-3dd398cbea06.json"
+
+# Diccionario de credenciales de Google
+google_credentials = {
+    "type": os.environ.get("GOOGLE_TYPE"),
+    "project_id": os.environ.get("GOOGLE_PROJECT_ID"),
+    "private_key_id": os.environ.get("GOOGLE_PRIVATE_KEY_ID"),
+    "private_key": os.environ.get("GOOGLE_PRIVATE_KEY").replace('\\n', '\n'),  # Maneja los saltos de línea
+    "client_email": os.environ.get("GOOGLE_CLIENT_EMAIL"),
+    "client_id": os.environ.get("GOOGLE_CLIENT_ID"),
+    "auth_uri": os.environ.get("GOOGLE_AUTH_URI"),
+    "token_uri": os.environ.get("GOOGLE_TOKEN_URI"),
+    "auth_provider_x509_cert_url": os.environ.get("GOOGLE_AUTH_PROVIDER_CERT_URL"),
+    "client_x509_cert_url": os.environ.get("GOOGLE_CLIENT_CERT_URL"),
+    "universe_domain": os.environ.get("GOOGLE_UNIVERSE_DOMAIN", "googleapis.com"),  # Valor predeterminado
+}
+
+# Crear el directorio .credentials si no existe
+credentials_dir = "./.credentials"
+os.makedirs(credentials_dir, exist_ok=True)
+
+# Guardar el JSON en un archivo temporal
+json_path = os.path.join(credentials_dir, "google_credentials.json")
+with open(json_path, "w") as f:
+    json.dump(google_credentials, f)
+
+# Configurar la variable de entorno
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = json_path
+
+print(f"Credenciales guardadas en: {json_path}")
 
 def translate_to_hebrew(text):
     """
