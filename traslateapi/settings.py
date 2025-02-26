@@ -153,5 +153,5 @@ LOGIN_REDIRECT_URL = '/inicio/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['cabala2-production.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ['https://cabala2-production.up.railway.app']
 
