@@ -18,6 +18,7 @@ from django.utils import timezone
 from datetime import timedelta
 from django.dispatch import receiver
 from django.contrib.auth.signals import user_logged_in
+from google.oauth2 import service_account
 import json
 import os
 from dotenv import load_dotenv
@@ -131,18 +132,7 @@ google_credentials = {
 }
 
 # Crear el directorio .credentials si no existe
-credentials_dir = "./.credentials"
-os.makedirs(credentials_dir, exist_ok=True)
-
-# Guardar el JSON en un archivo temporal
-json_path = os.path.join(credentials_dir, "google_credentials.json")
-with open(json_path, "w") as f:
-    json.dump(google_credentials, f)
-
-# Configurar la variable de entorno
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = json_path
-
-print(f"Credenciales guardadas en: {json_path}")
+credentials = service_account.Credentials.from_service_account_info(google_credentials)
 
 def translate_to_hebrew(text):
     """
@@ -152,7 +142,7 @@ def translate_to_hebrew(text):
         return text
     else:
         try:
-            translate_client = translate.Client()
+            translate_client = translate.Client(credentials=credentials)
             result = translate_client.translate(text, target_language="he")
             return result["translatedText"]
         except Exception as e:
