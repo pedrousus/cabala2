@@ -34,7 +34,7 @@ DEFAULT_FROM_EMAIL = 'sustaitajorge04101b@gmail.com'
 SECRET_KEY = 'django-insecure-j9%0m$a&^fgvvw8yk(d)wj0mxs9l5m=x97=fgtfa)ftb)u#(^0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
